@@ -32,9 +32,7 @@ public class GameManager {
                     // TODO fight
                     this.currentLevel++;
                 }
-                case 1 -> {
-                    // TODO upgrade abilities
-                }
+                case 1 -> this.upgradeAbilities();
                 case 2 -> {
                     // TODO save game
                 }
@@ -69,5 +67,23 @@ public class GameManager {
         PrintUtils.printDivider();
         System.out.println();
         this.heroAbilityManager.spendHeroAvailablePoints();
+    }
+
+    private void upgradeAbilities() {
+        System.out.println("Your abilities are:");
+        PrintUtils.printAbilities(this.hero);
+
+        System.out.println("0. Go back");
+        System.out.println("1. Spend points (" + this.hero.getHeroAvailablePoints() + " points left)");
+        System.out.println("2. Remove points");
+
+        final int choice = InputUtils.readInt();
+        switch (choice) {
+            case 0 -> {
+            }
+            case 1 -> this.heroAbilityManager.spendHeroAvailablePoints();
+            case 2 -> this.heroAbilityManager.removeHeroAvailablePoints();
+            default -> System.out.println("Invalid choice!");
+        }
     }
 }
