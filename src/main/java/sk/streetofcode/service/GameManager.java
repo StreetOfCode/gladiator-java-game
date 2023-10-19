@@ -9,10 +9,13 @@ import sk.streetofcode.utility.PrintUtils;
 public class GameManager {
     private final HeroAbilityManager heroAbilityManager;
     private final Hero hero;
+
+    private final FileService fileService;
     private int currentLevel;
 
     public GameManager() {
         this.hero = new Hero("");
+        this.fileService = new FileService();
         this.heroAbilityManager = new HeroAbilityManager(this.hero);
         this.currentLevel = Constants.INITIAL_LEVEL;
     }
@@ -33,9 +36,7 @@ public class GameManager {
                     this.currentLevel++;
                 }
                 case 1 -> this.upgradeAbilities();
-                case 2 -> {
-                    // TODO save game
-                }
+                case 2 -> fileService.saveGame(this.hero, this.currentLevel);
                 case 3 -> {
                     System.out.println("Are you sure?");
                     System.out.println("0. No");
