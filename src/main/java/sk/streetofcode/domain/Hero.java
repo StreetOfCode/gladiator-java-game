@@ -40,6 +40,10 @@ public class Hero extends GameCharacter {
         this.heroAvailablePoints += delta;
     }
 
+    public void setAbility(Ability ability, int value) {
+        abilities.put(ability, value);
+    }
+
     private Map<Ability, Integer> getInitialAbilities() {
         return new HashMap<>(Map.of(
                 Ability.ATTACK, 1,

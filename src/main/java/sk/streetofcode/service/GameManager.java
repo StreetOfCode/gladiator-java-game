@@ -1,5 +1,6 @@
 package sk.streetofcode.service;
 
+import sk.streetofcode.ability.Ability;
 import sk.streetofcode.ability.HeroAbilityManager;
 import sk.streetofcode.constant.Constants;
 import sk.streetofcode.domain.Enemy;
@@ -29,7 +30,7 @@ public class GameManager {
         this.enemiesByLevel = EnemyGenerator.createEnemies();
     }
 
-    public void startGame() {
+    public void startGame() throws InterruptedException {
         this.initGame();
 
         while (this.currentLevel <= this.enemiesByLevel.size()) {
@@ -43,8 +44,23 @@ public class GameManager {
             switch (choice) {
                 case 0 -> {
                     if (battleService.isHeroReadyToBattle(this.hero, enemy)) {
-                        // TODO battle
-                        this.currentLevel++;
+                        final int heroHealthBeforeBattle = this.hero.getAbilities().get(Ability.HEALTH);
+
+                        // battle
+                        final boolean haveHeroWon = battleService.battle(this.hero, enemy);
+                        if (haveHeroWon) {
+                            PrintUtils.printDivider();
+                            System.out.println("You have won this battle! You have gained " + this.currentLevel + " point to spend");
+                            this.hero.updateHeroAvailablePoints(this.currentLevel);
+                            this.currentLevel++;
+                        } else {
+                            System.out.println("You have lost!");
+                        }
+
+                        // restore hero health
+                        this.hero.setAbility(Ability.HEALTH, heroHealthBeforeBattle);
+                        System.out.println("You have full health now!");
+                        PrintUtils.printDivider();
                     }
                 }
                 case 1 -> this.upgradeAbilities();
