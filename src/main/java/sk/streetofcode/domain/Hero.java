@@ -1,3 +1,8 @@
+package sk.streetofcode.domain;
+
+import sk.streetofcode.ability.Ability;
+import sk.streetofcode.constant.Constants;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,12 +15,12 @@ public class Hero {
     public Hero(String name) {
         this.name = name;
         this.abilities = getInitialAbilities();
-        this.heroAvailablePoints = 7;
+        this.heroAvailablePoints = Constants.INITIAL_ABILITY_POINTS;
     }
 
     public void updateAbility(Ability ability, int delta) {
         if (ability.equals(Ability.HEALTH)) {
-            abilities.put(ability, abilities.get(ability) + delta * 5);
+            abilities.put(ability, abilities.get(ability) + delta * Constants.HEALTH_OF_ONE_POINT);
         } else {
             abilities.put(ability, abilities.get(ability) + delta);
         }
@@ -23,6 +28,10 @@ public class Hero {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getHeroAvailablePoints() {

@@ -1,3 +1,5 @@
+package sk.streetofcode.utility;
+
 import java.util.Scanner;
 
 public class InputUtils {

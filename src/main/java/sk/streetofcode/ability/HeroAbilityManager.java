@@ -1,24 +1,17 @@
-import java.util.Map;
+package sk.streetofcode.ability;
 
-public class Main {
+import sk.streetofcode.domain.Hero;
+import sk.streetofcode.utility.InputUtils;
+import sk.streetofcode.utility.PrintUtils;
 
-    public static void main(String[] args) {
-        System.out.println("Welcome to the Gladiatus game!");
-        System.out.println("Enter your name: ");
-        final String name = InputUtils.readString();
-        final Hero hero = new Hero(name);
-        System.out.println("Hello " + hero.getName() + "! Let's start the game!");
+public class HeroAbilityManager {
+    private final Hero hero;
 
-        System.out.println("Your abilities are:");
-        for (Map.Entry<Ability, Integer> entry : hero.getAbilities().entrySet()) {
-            System.out.print(entry.getKey() + ": " + entry.getValue() + ", ");
-        }
-        System.out.println();
-        spendHeroAvailablePoints(hero);
+    public HeroAbilityManager(Hero hero) {
+        this.hero = hero;
     }
-
-    public static void spendHeroAvailablePoints(Hero hero) {
-        int availablePoints = hero.getHeroAvailablePoints();
+    public void spendHeroAvailablePoints() {
+        int availablePoints = this.hero.getHeroAvailablePoints();
 
         if (availablePoints == 0) {
             System.out.println("You have no points to spend!");
@@ -56,22 +49,16 @@ public class Main {
                     continue;
                 }
             }
-            hero.updateAbility(ability, 1);
+            this.hero.updateAbility(ability, 1);
             System.out.println("You have upgraded " + ability);
-            hero.updateHeroAvailablePoints(-1);
+            this.hero.updateHeroAvailablePoints(-1);
             availablePoints--;
             if (availablePoints > 1) {
-                for (Map.Entry<Ability, Integer> entry : hero.getAbilities().entrySet()) {
-                    System.out.print(entry.getKey() + ": " + entry.getValue() + ", ");
-                }
-                System.out.println();
+                PrintUtils.printAbilities(this.hero);
             }
         }
 
         System.out.println("You have spent all your points. Your abilities are:");
-        for (Map.Entry<Ability, Integer> entry : hero.getAbilities().entrySet()) {
-            System.out.print(entry.getKey() + ": " + entry.getValue() + ", ");
-        }
-        System.out.println();
+        PrintUtils.printAbilities(this.hero);
     }
 }
