@@ -2,30 +2,39 @@ package sk.streetofcode.service;
 
 import sk.streetofcode.ability.HeroAbilityManager;
 import sk.streetofcode.constant.Constants;
+import sk.streetofcode.domain.Enemy;
 import sk.streetofcode.domain.Hero;
 import sk.streetofcode.domain.LoadedGame;
+import sk.streetofcode.utility.EnemyGenerator;
 import sk.streetofcode.utility.InputUtils;
 import sk.streetofcode.utility.PrintUtils;
 
+import java.util.Map;
+
 public class GameManager {
     private final HeroAbilityManager heroAbilityManager;
-    private Hero hero;
 
+    private final Map<Integer, Enemy> enemiesByLevel;
+    private Hero hero;
     private final FileService fileService;
+    private final BattleService battleService;
     private int currentLevel;
 
     public GameManager() {
         this.hero = new Hero("");
         this.fileService = new FileService();
+        this.battleService = new BattleService();
         this.heroAbilityManager = new HeroAbilityManager(this.hero);
         this.currentLevel = Constants.INITIAL_LEVEL;
+        this.enemiesByLevel = EnemyGenerator.createEnemies();
     }
 
     public void startGame() {
         this.initGame();
 
-        while (this.currentLevel <= 5) {
-            System.out.println("0. Fight " + "Level " + this.currentLevel);
+        while (this.currentLevel <= this.enemiesByLevel.size()) {
+            final Enemy enemy = this.enemiesByLevel.get(this.currentLevel);
+            System.out.println("0. Fight " + enemy.getName() + " (level " + this.currentLevel + ")");
             System.out.println("1. Upgrade abilities (" + this.hero.getHeroAvailablePoints() + " points left)");
             System.out.println("2. Save game");
             System.out.println("3. Exit game");
@@ -33,8 +42,10 @@ public class GameManager {
             final int choice = InputUtils.readInt();
             switch (choice) {
                 case 0 -> {
-                    // TODO fight
-                    this.currentLevel++;
+                    if (battleService.isHeroReadyToBattle(this.hero, enemy)) {
+                        // TODO battle
+                        this.currentLevel++;
+                    }
                 }
                 case 1 -> this.upgradeAbilities();
                 case 2 -> fileService.saveGame(this.hero, this.currentLevel);
