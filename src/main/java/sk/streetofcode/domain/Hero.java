@@ -6,34 +6,26 @@ import sk.streetofcode.constant.Constants;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Hero {
-    private String name;
-    private Map<Ability, Integer> abilities;
-
+public class Hero extends GameCharacter {
     private int heroAvailablePoints;
 
     public Hero(String name) {
-        this.name = name;
-        this.abilities = getInitialAbilities();
+        super(name, new HashMap<>());
+        super.abilities = getInitialAbilities();
         this.heroAvailablePoints = Constants.INITIAL_ABILITY_POINTS;
     }
 
     public Hero(String name, Map<Ability, Integer> abilities, int heroAvailablePoints) {
-        this.name = name;
-        this.abilities = abilities;
+        super(name, abilities);
         this.heroAvailablePoints = heroAvailablePoints;
     }
 
     public void updateAbility(Ability ability, int delta) {
         if (ability.equals(Ability.HEALTH)) {
-            abilities.put(ability, abilities.get(ability) + delta * Constants.HEALTH_OF_ONE_POINT);
+            super.abilities.put(ability, abilities.get(ability) + delta * Constants.HEALTH_OF_ONE_POINT);
         } else {
-            abilities.put(ability, abilities.get(ability) + delta);
+            super.abilities.put(ability, abilities.get(ability) + delta);
         }
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {
@@ -46,10 +38,6 @@ public class Hero {
 
     public void updateHeroAvailablePoints(int delta) {
         this.heroAvailablePoints += delta;
-    }
-
-    public Map<Ability, Integer> getAbilities() {
-        return abilities;
     }
 
     private Map<Ability, Integer> getInitialAbilities() {
