@@ -3,12 +3,13 @@ package sk.streetofcode.service;
 import sk.streetofcode.ability.HeroAbilityManager;
 import sk.streetofcode.constant.Constants;
 import sk.streetofcode.domain.Hero;
+import sk.streetofcode.domain.LoadedGame;
 import sk.streetofcode.utility.InputUtils;
 import sk.streetofcode.utility.PrintUtils;
 
 public class GameManager {
     private final HeroAbilityManager heroAbilityManager;
-    private final Hero hero;
+    private Hero hero;
 
     private final FileService fileService;
     private int currentLevel;
@@ -58,6 +59,23 @@ public class GameManager {
 
     private void initGame() {
         System.out.println("Welcome to the Gladiatus game!");
+        System.out.println("0. Start new game");
+        System.out.println("1. Load game");
+
+        final int choice = InputUtils.readInt();
+        switch (choice) {
+            case 0 -> System.out.println("Let's go then.");
+            case 1 -> {
+                final LoadedGame loadGame = fileService.loadGame();
+                if (loadGame != null) {
+                    this.hero = loadGame.getHero();
+                    this.currentLevel = loadGame.getCurrentLevel();
+                    return;
+                }
+            }
+            default -> System.out.println("Invalid choice!");
+        }
+
         System.out.println("Enter your name: ");
         final String name = InputUtils.readString();
         this.hero.setName(name);

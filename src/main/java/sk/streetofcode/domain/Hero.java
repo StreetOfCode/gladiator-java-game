@@ -18,6 +18,12 @@ public class Hero {
         this.heroAvailablePoints = Constants.INITIAL_ABILITY_POINTS;
     }
 
+    public Hero(String name, Map<Ability, Integer> abilities, int heroAvailablePoints) {
+        this.name = name;
+        this.abilities = abilities;
+        this.heroAvailablePoints = heroAvailablePoints;
+    }
+
     public void updateAbility(Ability ability, int delta) {
         if (ability.equals(Ability.HEALTH)) {
             abilities.put(ability, abilities.get(ability) + delta * Constants.HEALTH_OF_ONE_POINT);
